@@ -9,4 +9,8 @@ import reactor.util.function.Tuple2;
 import java.util.List;
 
 public interface IBranchService extends IBaseService<BranchEntity> {
+
+    Flux<BranchEntity> findByFranchiseId(Long franchiseId);
+
+    Mono<Tuple2<List<BranchEntity>, Long>> findByFranchiseIdPaginated(Long franchiseId, int page, int size);
 }

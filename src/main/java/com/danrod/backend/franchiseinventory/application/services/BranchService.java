@@ -30,5 +30,18 @@ public class BranchService extends BaseService<BranchEntity> implements IBranchS
     }
 
 
+    @Transactional(readOnly = true)
+    @Override
+    public Flux<BranchEntity> findByFranchiseId(Long franchiseId) {
+        return branchRepository.findByFranchiseId(franchiseId);
+    }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Mono<Tuple2<List<BranchEntity>, Long>> findByFranchiseIdPaginated(Long franchiseId, int page, int size) {
+        long offset = (long) page * size;
+        Mono<List<BranchEntity>> dataMono = branchRepository.findByFranchiseId(franchiseId, size, offset).collectList();
+        Mono<Long> countMono = branchRepository.countByFranchiseId(franchiseId);
+        return Mono.zip(dataMono, countMono);
+    }
 }

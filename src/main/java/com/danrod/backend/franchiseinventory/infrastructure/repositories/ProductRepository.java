@@ -32,4 +32,14 @@ public interface ProductRepository extends IBaseRepository<ProductEntity, Long> 
     Flux<ProductEntity> findByBranchId(Long branchId);
 
 
+    /**
+     * Encuentra el producto con el stock más alto para una sucursal específica.
+     * Solo considera productos activos (no borrados lógicamente).
+     * @param branchId ID de la sucursal.
+     * @return Un Mono que emite el producto con el stock más alto, o vacío si no hay productos.
+     */
+    @Query("SELECT * FROM products WHERE branch_id = :branchId AND deleted_at IS NULL ORDER BY stock DESC LIMIT 1")
+    Mono<ProductEntity> findTopByBranchIdOrderByStockDesc(Long branchId);
+
+
 }
