@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: Franchise Inventory Service
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /docs
+    enabled: true
+  api-docs:
+    enabled: true
+  show-actuator: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      # Muestra detalles completos en el endpoint de salud, �til para diagn�sticos
+      show-details: always
+  metrics:
+    tags:
+      # Una etiqueta global para identificar que todas estas m�tricas vienen de esta aplicaci�n
+      application: ${spring.application.name}
