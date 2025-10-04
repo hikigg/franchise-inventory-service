@@ -1,0 +1,71 @@
+services:
+
+  app-franchise-inventory-api:
+    container_name: app-franchise-inventory-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - TZ=America/Bogota
+    depends_on:
+      db-franchise-inventory:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - franchise-inventory-network
+
+  db-franchise-inventory:
+    container_name: db-franchise-inventory
+    image: 'postgres:16-alpine'
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - TZ=America/Bogota
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-franchise-inventory-data:/var/lib/postgresql/data
+    networks:
+      - franchise-inventory-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    container_name: redis
+    image: 'redis:alpine'
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - franchise-inventory-network
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+# ----------------------------------------
+# Networks and Volumes
+# ----------------------------------------
+networks:
+  franchise-inventory-network:
+    driver: bridge
+
+volumes:
+  db-franchise-inventory-data:
+    driver: local
+  redis-data:
+    driver: local
