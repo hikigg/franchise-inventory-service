@@ -1,28 +1,14 @@
 spring:
-  # Flyway necesita la conexión bloqueante para ejecutar las migraciones al arranque.
   flyway:
-    url: jdbc:postgresql://db-franchise-inventory:5432/${POSTGRES_DB}
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${SPRING_FLYWAY_URL}
+    user: ${SPRING_FLYWAY_USER}
+    password: ${SPRING_FLYWAY_PASSWORD}
 
   r2dbc:
-    url: r2dbc:postgresql://db-franchise-inventory:5432/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${SPRING_R2DBC_URL}
+    username: ${SPRING_R2DBC_USERNAME}
+    password: ${SPRING_R2DBC_PASSWORD}
     pool:
       enabled: true
       initial-size: 5
       max-size: 20
-
-  # --- Configuración de Redis ---
-  data:
-    redis:
-      host: redis # El nombre del servicio en Docker Compose
-      port: 6379
-      password: ${REDIS_PASSWORD}
-
-# Configuración de logging para ver mejor los SQL de R2DBC
-logging:
-  level:
-    org.springframework.data.r2dbc: DEBUG
-    io.r2dbc.postgresql: DEBUG

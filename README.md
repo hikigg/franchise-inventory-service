@@ -102,3 +102,18 @@ Se ha implementado Spring Boot Actuator para exponer información útil sobre el
 La persistencia de datos se realiza en una base de datos **PostgreSQL**. El esquema de la base de datos (tablas, índices, relaciones) se gestiona de forma automática y versionada a través de **Flyway**.
 
 Los scripts de migración se encuentran en `src/main/resources/db/migration`. Cada vez que la aplicación se inicia, Flyway verifica si hay nuevas migraciones y actualiza la base de datos según sea necesario, garantizando consistencia entre entornos.
+
+## 7. Despliegue en la Nube (AWS con Terraform)
+
+Además de la ejecución local, este proyecto está completamente configurado para ser desplegado en AWS utilizando un enfoque de Infraestructura como Código (IaC) con Terraform.
+
+Este proceso automatiza la creación de todos los recursos necesarios en la nube, incluyendo:
+-   Una red virtual (VPC) con subredes públicas.
+-   Una base de datos PostgreSQL gestionada a través de Amazon RDS.
+-   Un repositorio de imágenes de Docker (Amazon ECR).
+-   Un clúster de contenedores (Amazon ECS) con AWS Fargate para una ejecución sin servidor.
+-   Un balanceador de carga de aplicación (ALB) para distribuir el tráfico y exponer la API a internet.
+
+Para obtener las instrucciones detalladas paso a paso sobre cómo realizar el despliegue en la nube, consulta la guía de despliegue:
+
+**[➡️ Guía de Despliegue en AWS con Terraform (DEPLOYMENT.md)](DEPLOYMENT.md)**
