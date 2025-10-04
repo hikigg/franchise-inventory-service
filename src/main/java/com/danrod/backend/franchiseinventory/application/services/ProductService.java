@@ -27,5 +27,12 @@ public class ProductService extends BaseService<ProductEntity> implements IProdu
         return "Producto";
     }
 
-
+    @Override
+    @Transactional(readOnly = true)
+    public Mono<Tuple2<List<ProductEntity>, Long>> findByBranchIdPaginated(Long branchId, int page, int size) {
+        long offset = (long) page * size;
+        Mono<List<ProductEntity>> dataMono = productRepository.findByBranchId(branchId, size, offset).collectList();
+        Mono<Long> countMono = productRepository.countByBranchId(branchId);
+        return Mono.zip(dataMono, countMono);
+    }
 }

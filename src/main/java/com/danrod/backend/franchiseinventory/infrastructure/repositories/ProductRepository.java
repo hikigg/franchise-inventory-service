@@ -42,4 +42,16 @@ public interface ProductRepository extends IBaseRepository<ProductEntity, Long> 
     Mono<ProductEntity> findTopByBranchIdOrderByStockDesc(Long branchId);
 
 
+    /**
+     * Encuentra productos paginados por ID de sucursal.
+     */
+    @Query("SELECT * FROM products WHERE branch_id = :branchId AND deleted_at IS NULL ORDER BY name ASC LIMIT :size OFFSET :offset")
+    Flux<ProductEntity> findByBranchId(Long branchId, int size, long offset);
+
+    /**
+     * Cuenta el total de productos activos para una sucursal.
+     */
+    @Query("SELECT COUNT(*) FROM products WHERE branch_id = :branchId AND deleted_at IS NULL")
+    Mono<Long> countByBranchId(Long branchId);
+
 }
